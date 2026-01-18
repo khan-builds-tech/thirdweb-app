@@ -1,10 +1,9 @@
 "use client";
 import thirdwebIcon from "@public/thirdweb.svg";
 import Image from "next/image";
-import { ConnectButton, BuyWidget, PayEmbed, getDefaultToken, darkTheme } from "thirdweb/react";
-import { ethereum } from "thirdweb/chains";
+import { ConnectButton, CheckoutWidget, ConnectEmbed } from "thirdweb/react";
+import { base, ethereum } from "thirdweb/chains";
 import { client } from "./client";
-import { SocialIcon } from "thirdweb/react";
 import { Account, createWallet, inAppWallet, Wallet, linkProfile } from "thirdweb/wallets";
 import { useState } from "react";
 
@@ -13,6 +12,36 @@ export default function Home() {
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [account, setAccount] = useState<Account | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const wallets = [
+    createWallet("io.metamask"),
+    createWallet("com.coinbase.wallet"),
+    createWallet("me.rainbow"),
+    inAppWallet(
+      // built-in auth methods
+      // or bring your own auth endpoint
+      {
+        auth: {
+          options: [
+            "x",
+            // "google",
+            // "apple",
+            // "discord",
+            // "facebook",
+            // "farcaster",
+            // "telegram",
+            // "coinbase",
+            // "line",
+            // "email",
+            // "phone",
+            // "passkey",
+            // "guest",
+          ],
+        }
+      },
+    ),
+  ];
+
   const handleXAuth = async () => {
     setLoading(true);
     const wallet = inAppWallet();
@@ -39,43 +68,63 @@ export default function Home() {
     <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
       <div className="py-20">
         {/* <Header /> */}
-
-        <div className="flex justify-center">
-          {/* <ConnectButton
+        {/* <div className="flex justify-center mb-20">
+          <ConnectEmbed chain={base} client={client} wallets={wallets} />
+        </div> */}
+        <div className="flex justify-center mb-20">
+          <ConnectButton
             client={client}
-            wallets={[
-              createWallet("io.metamask"),
-              createWallet("com.coinbase.wallet"),
-              createWallet("me.rainbow"),
-            ]}
-          /> */}
-          <div className="flex flex-col items-center">
+            wallets={wallets}
+          />
+          {/* <div className="flex flex-col items-center">
             <SocialIcon provider="x" height={100} width={100} />
             {!wallet && <button className="mb-20" onClick={() => { handleXAuth() }}>Connect with X</button>}
             {wallet && <button onClick={() => { disconnectWallet() }}>Disconnect</button>}
-          </div>
+          </div> */}
         </div>
         {account && <div className="flex justify-center mb-20">Account: {account.address}</div>}
         <div className="flex justify-center mb-20">
-          <PayEmbed
+          <CheckoutWidget
+            chain={base}
+            amount="35"
+            seller="0x..."
+            name="Drip Teddy"
+            description="A cute teddy bear"
+            image="/drip-teddy.avif"
             client={client}
             theme={"dark"}
-            activeWallet={wallet ?? undefined}
-            payOptions={{
-              mode: "direct_payment",
-              paymentInfo: {
-                amount: "35",
-                chain: ethereum,
-                token: getDefaultToken(ethereum, "USDC"),
-                sellerAddress: "0x...", // the wallet address of the seller
+            paymentMethods={["crypto", "card"]}
+            connectOptions={{
+              connectModal: {
+                size: "compact",
+                title: "lol",
               },
-              metadata: {
-                name: "Drip Teddy",
-                image: "/drip-teddy.avif",
-                description: "A cute teddy bear",
-
-              },
+              wallets: [
+                createWallet("io.metamask"),
+                createWallet("com.coinbase.wallet"),
+                createWallet("me.rainbow"),
+                inAppWallet({
+                  auth: {
+                    options: ["x"],
+                  },
+                }),
+              ]
             }}
+          // payOptions={{
+          //   mode: "direct_payment",
+          //   paymentInfo: {
+          //     amount: "35",
+          //     chain: ethereum,
+          //     token: getDefaultToken(ethereum, "USDC"),
+          //     sellerAddress: "0x...", // the wallet address of the seller
+          //   },
+          //   metadata: {
+          //     name: "Drip Teddy",
+          //     image: "/drip-teddy.avif",
+          //     description: "A cute teddy bear",
+
+          //   },
+          // }}
           />
         </div>
         {/* <ThirdwebResources /> */}
