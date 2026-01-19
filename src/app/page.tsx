@@ -126,6 +126,33 @@ export default function Home() {
           //   },
           // }}
           />
+          <CheckoutWidget
+            chain={base}
+            amount="35"
+            seller="0x..."
+            name="Drip Teddy"
+            description="A cute teddy bear"
+            image="/drip-teddy.avif"
+            client={client}
+            theme={"dark"}
+            paymentMethods={["crypto", "card"]}
+            connectOptions={{
+              connectModal: {
+                size: "compact",
+                title: "lol",
+              },
+              wallets: [
+                createWallet("io.metamask"),
+                createWallet("com.coinbase.wallet"),
+                createWallet("me.rainbow"),
+                inAppWallet({
+                  auth: {
+                    options: ["x"],
+                  },
+                }),
+              ]
+            }}
+          />
         </div>
         {/* <ThirdwebResources /> */}
       </div>
