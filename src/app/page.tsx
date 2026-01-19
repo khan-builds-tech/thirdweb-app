@@ -83,7 +83,7 @@ export default function Home() {
           </div> */}
         </div>
         {account && <div className="flex justify-center mb-20">Account: {account.address}</div>}
-        <div className="flex justify-center mb-20 flex-col gap-10">
+        <div className="flex justify-center mb-20">
           <CheckoutWidget
             chain={base}
             amount="35"
@@ -125,33 +125,6 @@ export default function Home() {
 
           //   },
           // }}
-          />
-          <CheckoutWidget
-            chain={base}
-            amount="35"
-            seller="0x..."
-            name="Drip Teddy"
-            description="A cute teddy bear"
-            image="/drip-teddy.avif"
-            client={client}
-            theme={"dark"}
-            paymentMethods={["crypto", "card"]}
-            connectOptions={{
-              connectModal: {
-                size: "compact",
-                title: "lol",
-              },
-              wallets: [
-                createWallet("io.metamask"),
-                createWallet("com.coinbase.wallet"),
-                createWallet("me.rainbow"),
-                inAppWallet({
-                  auth: {
-                    options: ["x"],
-                  },
-                }),
-              ]
-            }}
           />
         </div>
         {/* <ThirdwebResources /> */}
