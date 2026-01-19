@@ -83,7 +83,7 @@ export default function Home() {
           </div> */}
         </div>
         {account && <div className="flex justify-center mb-20">Account: {account.address}</div>}
-        <div className="flex justify-center mb-20">
+        <div className="flex justify-center mb-20 flex-col gap-10">
           <CheckoutWidget
             chain={base}
             amount="35"
